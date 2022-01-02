@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="boxgame">
+        <div class="header"><span>Game Fighter</span></div>
+        <div class="score">
+            <h2 v-if="HPP == 0 && HPC == 0" >Tie</h2>
+            <h2 v-if="HPC < 0 " >Player win</h2>
+            <h2 v-if="HPP < 0 " >Player lose</h2>
+        </div>
+        <div class="box">
+            <div class="namecha">
+                <div class="p1">
+                    <p>Player</p>
+                </div>
+                <div class="p2">
+                    <p>Com</p>
+                </div>
+            </div>
+            <div class="character">
+                <div class="hero">
+                    <p v-if="HPP > 0">{{HPP}}</p>
+                    <p v-if="HPP <=0" >{{HPPL}}</p>
+                    <img src="image/267803843_438918800973111_2699396999718335588_n.jpg" alt=""
+                        v-bind:style="{height: HPP + 'px'}">
+                </div>
+                <div class="monster">
+                    <p v-if="HPC > 0" >{{HPC}}</p>
+                    <p v-if="HPC <= 0" >{{HPCL}}</p>
+                    <img src="image/png-clipart-alien-cartoon-monster-this-monster-is-not-terrible-cdr-mammal.png"
+                        alt="" v-bind:style="{height: HPC + 'px'}">
+                </div>
+            </div>
+        </div>
+        <center class="control">
+            <button v-if="HPC >= 100 || HPP >= 100" @click="start()">Start</button>
+            <button v-if="HPP <= 0 || HPC < 0" @click="restart()">Restart</button>
+            <button v-if="HPP > 0 && HPC > 0" @click="atk(3,10)">Attack</button>
+            <button v-if="charge >=2 && HPP > 5" @click="spatk(10,20)">Speciacl Attack</button>
+        </center>
+    </div>
+
+    <audio src="audio/Punch 2.mp3" id="sound1"></audio>
+    <audio src="audio/Slap.mp3" id="sound2"></audio>
+    <audio src="audio/Bell Transition.mp3" id="sound3"></audio>
+    <audio src="audio/Reloading.mp3" id="sound4"></audio>
+</body>
+
+<script>
+    var boxgame = new Vue({
+        el: "#boxgame",
+        data: {
+            HPP: 100,
+            HPC: 100,
+            HPPL:0,
+            HPCL:0,
+            charge: 0
+        },
+        methods: {
+            start: function () {
+                this.HPP=100
+                this.HPC=100
+                this.charge=0
+                var audio = document.getElementById("sound4");
+                audio.play();
+            },
+            restart: function () {
+                this.HPP=100
+                this.HPC=100
+                this.charge=0
+                var audio = document.getElementById("sound3");
+                audio.play();
+            },
+            atk: function (min, max) {
+                var randomDmg = Math.max(Math.floor(Math.random() * max) + 1, min);
+                var dmgc = Math.max(Math.floor(Math.random() * 15) + 1, 5)
+                this.HPC -= randomDmg;
+                this.charge++;
+                var vm = this;
+                setTimeout(() => { vm.HPP -= dmgc }, 500)
+                var audio = document.getElementById("sound1");
+                audio.play();
+            },
+            spatk: function (min, max) {
+                var randomDmg = Math.max(Math.floor(Math.random() * max) + 1, min);
+                var dmgc = Math.max(Math.floor(Math.random() * 15) + 1, 5)
+                this.HPC -= randomDmg;
+                this.charge=0;
+                var vm = this;
+                setTimeout(() => { vm.HPP -= dmgc }, 500)
+                var audio = document.getElementById("sound2");
+                audio.play();
+            },
+        },
+
+
+    })
+</script>
+
+</html>
